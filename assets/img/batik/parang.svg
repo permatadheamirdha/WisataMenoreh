@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Motif terinspirasi Parang (gaya Yogyakarta): pita diagonal dengan lengkung "lidah api"
+       dan "mlinjon" (belah ketupat) di sela pita. Pola berulang, untuk pinggiran/ornamen. -->
+  <rect width="32" height="32" fill="#f3eadb"/>
+  <!-- pita diagonal sogan -->
+  <g fill="#7a4a26">
+    <polygon points="0,24 24,0 32,0 32,8 8,32 0,32"/>
+    <polygon points="0,0 8,0 0,8"/>
+    <polygon points="24,32 32,24 32,32"/>
+  </g>
+  <!-- lengkung S di dalam pita -->
+  <g fill="none" stroke="#f3eadb" stroke-width="1.6" stroke-linecap="round">
+    <path d="M9 23 C 11 15, 19 19, 21 11"/>
+    <path d="M13 25 C 15 21, 19 22, 22 18"/>
+  </g>
+  <g fill="#f3eadb"><circle cx="21" cy="11" r="1.4"/><circle cx="9" cy="23" r="1.4"/></g>
+  <!-- mlinjon di sela pita -->
+  <g fill="#2f3b52">
+    <polygon points="24,20.5 27.5,24 24,27.5 20.5,24"/>
+    <polygon points="8,4.5 11.5,8 8,11.5 4.5,8"/>
+  </g>
+</svg>

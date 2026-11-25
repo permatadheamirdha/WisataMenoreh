@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240">
+  <!-- Joglo dan Tugu Yogyakarta, dipasang di atas bukit.svg -->
+  <!-- joglo -->
+  <g transform="translate(214 182)">
+    <path d="M-25 0 V13 M-13 0 V13 M13 0 V13 M25 0 V13" stroke="#ffffff" stroke-width="2.6"/>
+    <path d="M-27 13 H27" stroke="#ffffff" stroke-width="2.6"/>
+    <path d="M-35 1 L-15 -12 H15 L35 1 Z" fill="#ffffff"/>
+    <path d="M-14 -13.5 L-7 -27 H7 L14 -13.5 Z" fill="#ffc24b"/>
+  </g>
+  <!-- Tugu Yogyakarta -->
+  <g transform="translate(486 227)">
+    <g fill="#ffffff">
+      <path d="M-21 -6 H21 V0 H-21 Z M-17 -12 H17 V-6 H-17 Z M-13.5 -17 H13.5 V-12 H-13.5 Z"/>
+      <path d="M-10 -44 H10 V-17 H-10 Z"/>
+      <path d="M-8 -63 H8 V-49 H-8 Z"/>
+      <path d="M-6 -67 H6 L4.6 -81 H-4.6 Z"/>
+      <path d="M-4.6 -83 H4.6 L1.4 -98 H-1.4 Z"/>
+    </g>
+    <g fill="#ffc24b">
+      <path d="M-12 -49 H12 V-44 H-12 Z M-9.5 -67 H9.5 V-63 H-9.5 Z M-5.6 -83 H5.6 V-81 H-5.6 Z"/>
+      <circle cy="-100.5" r="2.6"/>
+      <path d="M-.7 -108 H.7 V-101 H-.7 Z"/>
+    </g>
+    <path d="M-5 -21 V-34 A5 5 0 0 1 5 -34 V-21 Z" fill="#8fc9bd"/>
+    <circle cy="-56" r="3" fill="#8fc9bd"/>
+    <path d="M-3.7 -87 L3.9 -85 M-3 -91 L3.1 -89 M-2.2 -95 L2.4 -93" stroke="#ffc24b" stroke-width="1.1"/>
+  </g>
+</svg>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"><title>Skenario uji SAW</title></head>
+<body style="font-family:Arial;margin:24px">
+<!-- Menjalankan 4 skenario uji dengan logika website (data.js, saw.js, rekom.js) dan OSRM,
+     lalu menyimpan hasilnya sebagai hasil_web.json untuk pipeline/ekspor_saw.py. -->
+<h1 style="font-size:18px">Skenario uji SAW</h1>
+<p id="info">Menghitung…</p>
+<a id="unduh" hidden download="hasil_web.json">Unduh hasil_web.json</a>
+<script src="../data/data.js"></script>
+<script src="../assets/js/saw.js"></script>
+<script src="../assets/js/rekom.js"></script>
+<script>
+const OSRM = "https://router.project-osrm.org";
+const SKENARIO = [
+  { kode: "S1", lokasi: { label: "Tugu Yogyakarta", lat: -7.7829, lon: 110.3671 }, kategori: [], durasiJam: 8, anggaran: null, ratingMin: 4 },
+  { kode: "S2", lokasi: { label: "Stasiun Wates", lat: -7.8606, lon: 110.1588 }, kategori: ["Wisata Alam", "Religi dan Budaya"], durasiJam: 6, anggaran: 50000, ratingMin: 4 },
+  { kode: "S3", lokasi: { label: "Kapanewon Samigaluh (Gerbosari)", lat: -7.6765, lon: 110.17 }, kategori: ["Wisata Alam", "Agrowisata"], durasiJam: 4, anggaran: 25000, ratingMin: 3.5 },
+  { kode: "S4", lokasi: { label: "Kapanewon Kalibawang (Banjararum)", lat: -7.693, lon: 110.246 }, kategori: [], durasiJam: null, anggaran: null, ratingMin: null },
+];
+const W = WISATA.features.map(f => f.properties);
+const IDX = Object.fromEntries(MATRIKS.ids.map((id, i) => [id, i]));
+const kor = d => (d == null ? null : (d / 60) * Rekom.PARAM.koreksiWaktu);
+
+async function tabel(awal, arah) {
+  const pts = [awal, ...W].map(p => p.lon.toFixed(6) + "," + p.lat.toFixed(6)).join(";");
+  const j = await (await fetch(`${OSRM}/table/v1/driving/${pts}?${arah}=0&annotations=duration,distance`)).json();
+  if (j.code !== "Ok") throw new Error("OSRM: " + j.code);   // tanpa cadangan: hasil resmi harus dari OSRM
+  return j;
+}
+async function jalankan(s) {
+  const a = await tabel(s.lokasi, "sources"), b = await tabel(s.lokasi, "destinations");
+  const alts = W.map((p, i) => ({ p, t0i: kor(a.durations[0][i + 1]), km0i: a.distances[0][i + 1] / 1000,
+    ti0: kor(b.durations[i + 1][0]), ki0: b.distances[i + 1][0] / 1000 }));
+  const byId = Object.fromEntries(alts.map(x => [x.p.id, x]));
+  const tempuh = (x, y) => {
+    if (x === "O") return byId[y].t0i;
+    if (y === "O") return byId[x].ti0;
+    const v = MATRIKS.waktu_menit[IDX[x]][IDX[y]];
+    return v == null ? null : v * Rekom.PARAM.koreksiWaktu;
+  };
+  const jarak = (x, y) => (x === "O" ? byId[y].km0i : y === "O" ? byId[x].ki0 : MATRIKS.jarak_km[IDX[x]][IDX[y]]);
+  const Q = { kategori: s.kategori, t0: 480, hari: 6, durasiJam: s.durasiJam, kembali: true, anggaran: s.anggaran, ratingMin: s.ratingMin, ulasanMin: null };
+  const { K, tidak } = Rekom.saring(alts, Q);
+  const { hasil } = Rekom.saw(K, BOBOT_DEFAULT.w);
+  const r = Rekom.susunRencana(hasil, tempuh, jarak, Q);
+  return { ...s,
+    K: hasil.map(h => [h.p.id, h.t0i, h.ti0, h.V, h.peringkat]),
+    R: r.urutan.map(u => [u.alt.p.id, u.tempuh, u.jarak, Rekom.keJam(u.tiba), Rekom.keJam(u.mulai), Rekom.keJam(u.selesai), u.alt.p.makan]),
+    P: r.pulang ? [r.pulang.tempuh, r.pulang.jarak] : null,
+    js: r.jamSelesai != null ? Rekom.keJam(r.jamSelesai) : null, tm: r.totalMenit, skor: r.skorTotal ?? null,
+    T: tidak.map(t => [t.alt.p.id, t.alasan.join("; ")]) };
+}
+window.selesai = (async () => {
+  try {
+    const skenario = [];
+    for (const s of SKENARIO) skenario.push(await jalankan(s));
+    const hasil = { waktu: new Date().toISOString(), skenario };
+    const el = document.getElementById("unduh");
+    el.href = URL.createObjectURL(new Blob([JSON.stringify(hasil)], { type: "application/json" }));
+    el.hidden = false;
+    document.getElementById("info").textContent = skenario.map(s => `${s.kode}: ${s.K.length} lolos, ${s.R.length} tempat dalam rencana`).join(" · ");
+    return hasil;
+  } catch (e) { document.getElementById("info").textContent = "Gagal: " + e.message; throw e; }
+})();
+</script>
+</body>
+</html>

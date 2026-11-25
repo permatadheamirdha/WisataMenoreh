@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 240" preserveAspectRatio="none">
+  <!-- Perbukitan Menoreh (boleh diregangkan). Langit & matahari diatur di style.css (.panorama). -->
+  <!-- punggungan belakang -->
+  <path d="M0 168 C40 150 70 138 110 142 S180 116 222 122 S300 152 342 140 S420 104 462 116 S540 150 586 138 S670 120 720 136 V240 H0 Z" fill="#8fc9bd"/>
+  <!-- punggungan tengah -->
+  <path d="M0 176 C60 184 96 152 150 158 S236 190 300 178 S396 150 450 164 S552 194 610 174 S690 158 720 166 V240 H0 Z" fill="#3c9a8b"/>
+  <!-- lereng depan + garis kontur -->
+  <path d="M0 190 C90 160 180 166 260 188 S430 220 520 202 S660 176 720 186 V240 H0 Z" fill="#146257"/>
+  <g fill="none" stroke="#3c9a8b" stroke-width="1.4" opacity=".75">
+    <path d="M0 201 C90 172 170 178 250 199 S380 224 420 224"/>
+    <path d="M0 212 C90 185 160 190 236 210 S320 226 350 228"/>
+    <path d="M720 198 C670 188 610 196 560 208"/>
+    <path d="M720 210 C680 201 640 206 600 215"/>
+  </g>
+  <!-- latar depan -->
+  <path d="M0 228 C180 214 430 216 720 226 V240 H0 Z" fill="#0d3b36"/>
+</svg>
